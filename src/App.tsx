@@ -9,6 +9,7 @@ import Bots from "./pages/Bots";
 import Templates from "./pages/Templates";
 import Campaigns from "./pages/Campaigns";
 import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="templates" element={<Templates />} />
             <Route path="campaigns" element={<Campaigns />} />
             <Route path="analytics" element={<Analytics />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

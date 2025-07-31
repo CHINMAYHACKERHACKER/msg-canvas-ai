@@ -1,10 +1,19 @@
+import { useState } from "react";
 import { Search, Bell, User, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { CreateCampaignDialog } from "@/components/Campaign/CreateCampaignDialog";
 
 export function Header() {
+  const [showCreateCampaign, setShowCreateCampaign] = useState(false);
+
   return (
+    <>
+      <CreateCampaignDialog 
+        open={showCreateCampaign} 
+        onOpenChange={setShowCreateCampaign} 
+      />
     <header className="bg-card border-b border-border px-6 py-4">
       <div className="flex items-center justify-between">
         {/* Search */}
@@ -18,7 +27,10 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <Button className="bg-gradient-primary hover:opacity-90">
+          <Button 
+            className="bg-gradient-primary hover:opacity-90"
+            onClick={() => setShowCreateCampaign(true)}
+          >
             <Plus className="w-4 h-4 mr-2" />
             New Campaign
           </Button>
@@ -38,5 +50,6 @@ export function Header() {
         </div>
       </div>
     </header>
+    </>
   );
 }

@@ -1,11 +1,45 @@
+import { useState } from "react";
 import { MessageSquare, Send, Bot, Users, BarChart3, TrendingUp } from "lucide-react";
 import { StatsCard } from "@/components/Dashboard/StatsCard";
 import { ChannelCard } from "@/components/Dashboard/ChannelCard";
 import { ActivityFeed } from "@/components/Dashboard/ActivityFeed";
 import { AnalyticsChart } from "@/components/Dashboard/AnalyticsChart";
+import { ChannelDetailsDialog } from "@/components/Dashboard/ChannelDetailsDialog";
 
 export default function Dashboard() {
+  const [selectedChannel, setSelectedChannel] = useState(null);
+  const [showChannelDetails, setShowChannelDetails] = useState(false);
+
+  const whatsappData = {
+    name: "WhatsApp",
+    icon: <MessageSquare className="w-6 h-6 text-white" />,
+    status: "connected",
+    messagesSent: 12543,
+    successRate: 98.5,
+    color: "#25D366"
+  };
+
+  const telegramData = {
+    name: "Telegram", 
+    icon: <Send className="w-6 h-6 text-white" />,
+    status: "connected",
+    messagesSent: 8921,
+    successRate: 95.2,
+    color: "#0088CC"
+  };
+
+  const handleChannelClick = (channelData: any) => {
+    setSelectedChannel(channelData);
+    setShowChannelDetails(true);
+  };
+
   return (
+    <>
+      <ChannelDetailsDialog 
+        open={showChannelDetails}
+        onOpenChange={setShowChannelDetails}
+        channel={selectedChannel}
+      />
     <div className="space-y-8">
       {/* Header */}
       <div>
@@ -57,22 +91,32 @@ export default function Dashboard() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ChannelCard
-            name="WhatsApp"
-            icon={<MessageSquare className="w-6 h-6 text-white" />}
-            status="connected"
-            messagesSent={12543}
-            successRate={98.5}
-            color="#25D366"
-          />
-          <ChannelCard
-            name="Telegram"
-            icon={<Send className="w-6 h-6 text-white" />}
-            status="connected"
-            messagesSent={8921}
-            successRate={95.2}
-            color="#0088CC"
-          />
+          <div 
+            onClick={() => handleChannelClick(whatsappData)} 
+            className="cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
+          >
+            <ChannelCard
+              name="WhatsApp"
+              icon={<MessageSquare className="w-6 h-6 text-white" />}
+              status="connected"
+              messagesSent={12543}
+              successRate={98.5}
+              color="#25D366"
+            />
+          </div>
+          <div 
+            onClick={() => handleChannelClick(telegramData)} 
+            className="cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
+          >
+            <ChannelCard
+              name="Telegram"
+              icon={<Send className="w-6 h-6 text-white" />}
+              status="connected"
+              messagesSent={8921}
+              successRate={95.2}
+              color="#0088CC"
+            />
+          </div>
         </div>
       </div>
 
@@ -82,5 +126,6 @@ export default function Dashboard() {
         <ActivityFeed />
       </div>
     </div>
+    </>
   );
 }
