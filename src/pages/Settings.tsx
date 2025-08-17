@@ -6,11 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Send, Smartphone, Bot, CheckCircle, XCircle } from "lucide-react";
+import { MessageSquare, Send, CheckCircle, XCircle, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const { toast } = useToast();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
   const [whatsappConnected, setWhatsappConnected] = useState(false);
   const [telegramConnected, setTelegramConnected] = useState(false);
   
@@ -74,9 +79,8 @@ export default function Settings() {
       </div>
 
       <Tabs defaultValue="channels" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="channels">Channels</TabsTrigger>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="general">General</TabsTrigger>
         </TabsList>
 
@@ -116,7 +120,7 @@ export default function Settings() {
                   <Input
                     id="whatsapp-api"
                     type="password"
-                    placeholder="Enter your WhatsApp API key"
+                    placeholder="Enter your API key"
                     value={whatsappConfig.apiKey}
                     onChange={(e) => setWhatsappConfig(prev => ({ ...prev, apiKey: e.target.value }))}
                   />
@@ -157,7 +161,7 @@ export default function Settings() {
                   </div>
                   <div>
                     <CardTitle>Telegram Bot</CardTitle>
-                    <CardDescription>Configure your Telegram bot integration</CardDescription>
+                    <CardDescription>Connect your Telegram bot</CardDescription>
                   </div>
                 </div>
                 <Badge variant={telegramConnected ? "default" : "secondary"} className="flex items-center gap-1">
@@ -173,7 +177,7 @@ export default function Settings() {
                   <Input
                     id="telegram-token"
                     type="password"
-                    placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
+                    placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
                     value={telegramConfig.botToken}
                     onChange={(e) => setTelegramConfig(prev => ({ ...prev, botToken: e.target.value }))}
                   />
@@ -214,36 +218,6 @@ export default function Settings() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="profile" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Settings</CardTitle>
-              <CardDescription>Manage your account information</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="first-name">First Name</Label>
-                  <Input id="first-name" placeholder="John" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="last-name">Last Name</Label>
-                  <Input id="last-name" placeholder="Doe" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="john@example.com" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
-                <Input id="company" placeholder="Your Company Name" />
-              </div>
-              <Button className="w-full md:w-auto">Save Profile</Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="general" className="space-y-6">
           <Card>
             <CardHeader>
@@ -273,6 +247,35 @@ export default function Settings() {
                 <Switch defaultChecked />
               </div>
               <Button className="w-full md:w-auto">Save Settings</Button>
+            </CardContent>
+          </Card>
+
+          {/* Account Management */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Account Management</CardTitle>
+              <CardDescription>Manage your account and session</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Current Session</p>
+                  <p className="text-xs text-muted-foreground">
+                    Logged in as {user?.email}
+                  </p>
+                </div>
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={() => {
+                    logout();
+                    navigate('/', { replace: true });
+                  }}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

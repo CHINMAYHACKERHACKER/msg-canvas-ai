@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { Search, Bell, User, Plus } from "lucide-react";
+import { Search, Bell, User, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { CreateCampaignDialog } from "@/components/Campaign/CreateCampaignDialog";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
   const [showCreateCampaign, setShowCreateCampaign] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/', { replace: true });
+  };
 
   return (
     <>
@@ -44,9 +54,24 @@ export function Header() {
             </Badge>
           </div>
 
-          <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
-            <User className="w-5 h-5" />
-          </Button>
+          <ThemeToggle size="sm" />
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground hidden md:block">
+              {user?.name || user?.email}
+            </span>
+            <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
+              <User className="w-5 h-5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-9 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </header>

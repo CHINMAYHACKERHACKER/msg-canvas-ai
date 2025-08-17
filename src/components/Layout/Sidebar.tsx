@@ -15,13 +15,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: Home },
-  { name: "Bots", href: "/bots", icon: Bot },
-  { name: "Templates", href: "/templates", icon: MessageSquare },
-  { name: "Campaigns", href: "/campaigns", icon: Send },
-  { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Contacts", href: "/contacts", icon: Users },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Dashboard", href: "/app", icon: Home },
+  { name: "Bots", href: "/app/bots", icon: Bot },
+  { name: "Templates", href: "/app/templates", icon: MessageSquare },
+  { name: "Campaigns", href: "/app/campaigns", icon: Send },
+  { name: "Analytics", href: "/app/analytics", icon: BarChart3 },
+  { name: "Contacts", href: "/app/contacts", icon: Users },
+  { name: "Settings", href: "/app/settings", icon: Settings },
 ];
 
 export function Sidebar() {
@@ -60,7 +60,8 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
         {navigation.map((item) => {
-          const isActive = location.pathname === item.href;
+          const isActive = location.pathname === item.href || 
+            (item.href !== '/app' && location.pathname.startsWith(item.href));
           return (
             <Link
               key={item.name}
