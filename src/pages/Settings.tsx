@@ -182,15 +182,6 @@ export default function Settings() {
                     onChange={(e) => setTelegramConfig(prev => ({ ...prev, botToken: e.target.value }))}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="telegram-username">Bot Username</Label>
-                  <Input
-                    id="telegram-username"
-                    placeholder="@your_bot_username"
-                    value={telegramConfig.botUsername}
-                    onChange={(e) => setTelegramConfig(prev => ({ ...prev, botUsername: e.target.value }))}
-                  />
-                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="telegram-webhook">Webhook URL</Label>
@@ -202,14 +193,14 @@ export default function Settings() {
                 />
               </div>
               <div className="flex items-center justify-between pt-4">
-                <div className="flex items-center space-x-2">
+                {/* <div className="flex items-center space-x-2">
                   <Switch
                     id="telegram-enabled"
                     checked={telegramConfig.enabled}
                     onCheckedChange={(checked) => setTelegramConfig(prev => ({ ...prev, enabled: checked }))}
                   />
                   <Label htmlFor="telegram-enabled">Enable Telegram messaging</Label>
-                </div>
+                </div> */}
                 <Button onClick={handleTelegramConnect} disabled={telegramConnected}>
                   {telegramConnected ? "Connected" : "Connect Telegram"}
                 </Button>
