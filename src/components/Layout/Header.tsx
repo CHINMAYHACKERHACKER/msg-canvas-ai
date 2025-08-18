@@ -24,26 +24,17 @@ export function Header() {
         open={showCreateCampaign} 
         onOpenChange={setShowCreateCampaign} 
       />
-    <header className="bg-card border-b border-border px-6 py-4">
-      <div className="flex items-center justify-between">
-        {/* Search */}
-        <div className="relative max-w-md flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            placeholder="Search campaigns, templates, bots..."
-            className="pl-10 bg-background"
-          />
-        </div>
-
+    <header className="bg-card border-b border-border px-6 py-3.5">
+      <div className="flex items-center justify-end">
         {/* Actions */}
-        <div className="flex items-center gap-4">
-          <Button 
+        <div className="flex items-center gap-4 justify-end">
+          {/* <Button 
             className="bg-gradient-primary hover:opacity-90"
             onClick={() => setShowCreateCampaign(true)}
           >
             <Plus className="w-4 h-4 mr-2" />
             New Campaign
-          </Button>
+          </Button> */}
           
           <div className="relative">
             <Button variant="ghost" size="sm" className="h-9 w-9 p-0">

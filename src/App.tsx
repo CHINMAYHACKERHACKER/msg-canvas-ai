@@ -19,6 +19,7 @@ import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import ForgotPassword from "./pages/ForgotPassword";
+import Users from "./pages/Users";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
                 <Route path="templates" element={<Templates />} />
                 <Route path="campaigns" element={<Campaigns />} />
                 <Route path="analytics" element={<Analytics />} />
+                <Route path="users" element={<Users />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
 

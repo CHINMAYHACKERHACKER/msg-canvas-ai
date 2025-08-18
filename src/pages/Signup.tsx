@@ -8,7 +8,8 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 const Signup = () => {
     const [formData, setFormData] = useState({
         fullName: '',
-        email: ''
+        email: '',
+        role: 'admin'
     });
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +34,8 @@ const Signup = () => {
         try {
             let reqObj = {
                 name: formData.fullName,
-                email: formData.email
+                email: formData.email,
+                role: formData.role
             }
             let signupResponse = await handleSignup(reqObj);
             if (signupResponse && signupResponse?.data && signupResponse?.data?.status && signupResponse?.data?.Email == 200) {
