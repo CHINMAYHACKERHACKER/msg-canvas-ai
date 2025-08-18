@@ -55,10 +55,25 @@ const getUserListData = async (reqObj) => {
     }
 }
 
+const handleForgotPassword = async (data) => {
+    try {
+        let forgotPasswordRes = await axiosRequestPost({
+            method: 'POST',
+            url: `${baseUrl}/user/forgot-password`,
+            data: data,
+            params: {}
+        })
+        return forgotPasswordRes;
+    } catch (error) {
+        console.error('Error in handleForgotPassword function:', error.message);
+    }
+}
+
 
 export {
     handleSignup,
     handleLogin,
     removeToken,
-    getUserListData
+    getUserListData,
+    handleForgotPassword
 }
