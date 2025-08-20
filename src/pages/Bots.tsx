@@ -81,10 +81,10 @@ export default function Bots() {
 
   const handleGenerateBot = async (prompt: string) => {
     setIsGenerating(true);
-    
+
     // Simulate AI generation
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     const newBot: BotData = {
       id: Date.now().toString(),
       name: `AI Generated Bot`,
@@ -97,7 +97,7 @@ export default function Bots() {
       isConnected: false,
       source: "ai"
     };
-    
+
     setBots(prev => [newBot, ...prev]);
     setIsGenerating(false);
     toast.success("Bot generated successfully!");
@@ -117,17 +117,21 @@ export default function Bots() {
   };
 
   const getChannelColor = (channel: string) => {
-    return channel === "WhatsApp" 
-      ? "bg-[#25D366]/10 text-[#25D366]" 
+    return channel === "WhatsApp"
+      ? "bg-[#25D366]/10 text-[#25D366]"
       : "bg-blue-500/10 text-blue-500";
   };
 
-  const filteredBots = bots.filter(bot => 
+  const filteredBots = bots.filter(bot =>
     selectedChannel === "all" ? true : bot.channel === selectedChannel
   );
 
   const connectedBots = filteredBots.filter(bot => bot.isConnected);
   const unconnectedBots = filteredBots.filter(bot => !bot.isConnected);
+  const aiGeneratedBots = filteredBots.filter(bot => bot.source === "ai");
+  const manualBots = filteredBots.filter(bot => bot.source === "manual");
+  const telegramAIBots = filteredBots.filter(bot => bot.channel === "Telegram" && bot.source === "ai");
+  const whatsappAIBots = filteredBots.filter(bot => bot.channel === "WhatsApp" && bot.source === "ai");
 
   const renderBotCard = (bot: BotData) => (
     <Card key={bot.id} className="group relative bg-gradient-card border-border hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
@@ -136,11 +140,10 @@ export default function Bots() {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
-                bot.channel === "WhatsApp" 
-                  ? "bg-[#25D366]/10" 
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${bot.channel === "WhatsApp"
+                  ? "bg-[#25D366]/10"
                   : "bg-blue-500/20"
-              }`}>
+                }`}>
                 {bot.channel === "WhatsApp" ? (
                   <WhatsAppIcon className="w-6 h-6 text-[#25D366]" />
                 ) : (
@@ -154,9 +157,15 @@ export default function Bots() {
             <div>
               <CardTitle className="text-lg mb-1">{bot.name}</CardTitle>
               <div className="flex items-center gap-2 flex-wrap">
-                <Badge className={`${getStatusColor(bot.status)} shadow-sm`}>
-                  {bot.status.charAt(0).toUpperCase() + bot.status.slice(1)}
-                </Badge>
+                {bot.isConnected ? (
+                  <Badge className="bg-success text-success-foreground shadow-sm">
+                    Connected
+                  </Badge>
+                ) : (
+                  <Badge className={`${getStatusColor(bot.status)} shadow-sm`}>
+                    {bot.status.charAt(0).toUpperCase() + bot.status.slice(1)}
+                  </Badge>
+                )}
                 <Badge className={`${getChannelColor(bot.channel)} shadow-sm flex items-center gap-1.5`}>
                   {bot.channel === "WhatsApp" ? (
                     <WhatsAppIcon className="w-3 h-3" />
@@ -181,7 +190,7 @@ export default function Bots() {
       </CardHeader>
       <CardContent className="space-y-6">
         <p className="text-sm text-muted-foreground leading-relaxed">{bot.description}</p>
-        
+
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-muted/50 rounded-lg p-3 text-center">
             <div className="text-xl font-semibold">{bot.conversations.toLocaleString()}</div>
@@ -279,8 +288,8 @@ export default function Bots() {
               {filteredBots.length} bot{filteredBots.length !== 1 ? 's' : ''} available
             </p>
           </div>
-          <Tabs 
-            value={selectedChannel} 
+          <Tabs
+            value={selectedChannel}
             onValueChange={(value: "WhatsApp" | "Telegram" | "all") => setSelectedChannel(value)}
             className="w-full sm:w-auto"
           >
@@ -303,6 +312,36 @@ export default function Bots() {
 
         {/* Bot Lists */}
         <div className="space-y-12">
+          {/* AI Generated Bots Section */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 text-purple-500 rounded-lg">
+                <Bot className="w-4 h-4" />
+                <h3 className="font-medium">AI Generated Bots</h3>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {aiGeneratedBots.length} bot{aiGeneratedBots.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+            {aiGeneratedBots.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {aiGeneratedBots.map(renderBotCard)}
+              </div>
+            ) : (
+              <Card className="border-dashed border-2 border-muted">
+                <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
+                    <Bot className="w-6 h-6 text-muted-foreground" />
+                  </div>
+                  <h4 className="text-lg font-medium mb-2">No AI Generated Bots</h4>
+                  <p className="text-sm text-muted-foreground max-w-sm">
+                    Create your first AI-powered bot using the form above.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
           {/* Connected Bots */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
@@ -332,36 +371,6 @@ export default function Bots() {
               </Card>
             )}
           </div>
-
-          {/* Unconnected Bots */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg">
-                <Link2Off className="w-4 h-4" />
-                <h3 className="font-medium">Unconnected Bots</h3>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {unconnectedBots.length} bot{unconnectedBots.length !== 1 ? 's' : ''}
-              </div>
-            </div>
-            {unconnectedBots.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {unconnectedBots.map(renderBotCard)}
-              </div>
-            ) : (
-              <Card className="border-dashed border-2 border-muted">
-                <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                    <Bot className="w-6 h-6 text-muted-foreground" />
-                  </div>
-                  <h4 className="text-lg font-medium mb-2">No Unconnected Bots</h4>
-                  <p className="text-sm text-muted-foreground max-w-sm">
-                    All your bots are connected and ready to handle conversations.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
         </div>
 
         {/* Empty State */}
@@ -373,10 +382,10 @@ export default function Bots() {
               </div>
               <h4 className="text-xl font-medium mb-3">No Bots Found</h4>
               <p className="text-sm text-muted-foreground max-w-sm mb-6">
-                No bots found for {selectedChannel === "all" ? "any channel" : selectedChannel}. 
+                No bots found for {selectedChannel === "all" ? "any channel" : selectedChannel}.
                 Create your first bot using AI or switch to a different channel.
               </p>
-              <Button 
+              <Button
                 className="bg-gradient-primary hover:opacity-90"
                 onClick={() => document.querySelector('textarea')?.focus()}
               >
